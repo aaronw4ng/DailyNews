@@ -48,7 +48,7 @@ const getNews = async () => {
   //if(dailyUpdate)
   newsItem.push(
     getBlock(
-      "Good afternoon Alpha Zeta! 🌤 Here's some daily news to keep you informed during the COVID pandemic!"
+      "Good evening Alpha Zeta! 🌤 Here's some daily news to keep you informed during the COVID pandemic!"
     ),
     getGif(gifURL)
   );
