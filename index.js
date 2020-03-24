@@ -7,13 +7,24 @@ var axios = require("axios");
 var cheerio = require("cheerio");
 var express = require("express");
 
-//Function
+//Constant gif API URL
+const giphyURL =
+  "https://api.giphy.com/v1/gifs/random?api_key=FcOuFsdxtb7cE0iatNEjFMQw1r4NmvHc&tag=animals&rating=pg-13";
+
+//Function to automatically format Slack text to its API standards
 const getBlock = text => ({
   type: "section",
   text: {
     type: "mrkdwn",
     text: text
   }
+});
+
+//Function to send random gifs
+const getGif = gif => ({
+  type: "image",
+  image_url: gif,
+  alt_text: "Random Gif"
 });
 
 //Async indicates promise function
@@ -23,16 +34,23 @@ const getNews = async () => {
   const response = await axios.get("http://theweek.com/5things");
   console.log("got news, prepared to send to slack");
   const $ = cheerio.load(response.data);
-
   const newsItemsHTML = $(".five-things-item");
 
   const newsItem = [];
+
+  console.log("Retrieving gif from giphy");
+  const gifData = await axios.get(giphyURL);
+  const gifID = gifData.data.data.id;
+  console.log(gifID);
+  const gifURL = "https://media.giphy.com/media/" + gifID + "/giphy.gif";
+  console.log(gifURL);
 
   //if(dailyUpdate)
   newsItem.push(
     getBlock(
       "Good afternoon Alpha Zeta! 🌤 Here's some daily news to keep you informed during the COVID pandemic!"
-    )
+    ),
+    getGif(gifURL)
   );
 
   for (let i = 0; i < 5; i++) {
