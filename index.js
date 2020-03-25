@@ -83,7 +83,7 @@ setInterval(async () => {
     })
     .then(() => console.log("Suceessfully posted news to"))
     .catch(e => console.log("Error sending news to Slack wehook:", e));
-}, 86400000);
+}, 5000);
 
 //Express server
 const server = express();
