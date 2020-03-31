@@ -6,6 +6,7 @@ require("dotenv").config();
 var axios = require("axios");
 var cheerio = require("cheerio");
 var express = require("express");
+var schedule = require("node-schedule");
 
 //Constant gif API URL
 const giphyURL =
@@ -70,8 +71,9 @@ const getNews = async () => {
   return newsItem;
 };
 
-console.log("setting interval...");
-setInterval(async () => {
+//Schedule interval for the 18th hour of everyday
+console.log("Setting interval...");
+schedule.scheduleJob(" * * 18 * * *", async () => {
   const news = await getNews().catch(e =>
     console.log("Error trying to get the news:", e)
   );
@@ -81,9 +83,9 @@ setInterval(async () => {
       text: "Daily News Update! 📰",
       blocks: news
     })
-    .then(() => console.log("Suceessfully posted news to"))
+    .then(() => console.log("Suceessfully posted news to Slack"))
     .catch(e => console.log("Error sending news to Slack wehook:", e));
-}, 86400000);
+});
 
 //Express server
 const server = express();
